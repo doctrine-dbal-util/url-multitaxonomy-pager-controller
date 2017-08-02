@@ -26,7 +26,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Templating\EngineInterface;
 // TODO: Remove Twig in filename
 
-use Twig_SimpleFunction;
 /**
  * Url controller.
  *

@@ -201,8 +201,8 @@ class UrlController
             'controller' => $this, /////////////////////////////////////!
             'f' => function (array $uuids) {return $this->createAddGivenTaxonomyTermEmptyFormView($uuids);},
             // 'clo' => function () {return function (array $uuids) {return $this->createAddGivenTaxonomyTermEmptyFormView($uuids);};},
-            'fb' => $this->createFormBuilder(),
-            'ff' => $this->container->get('form.factory'),
+            'fb' => $formFactory->createBuilder(),
+            'ff' => $formFactory,
             'model' => $model,
         ]));
     }

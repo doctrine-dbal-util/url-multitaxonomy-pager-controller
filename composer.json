@@ -1,0 +1,35 @@
+{
+    "name": "doctrine-dbal-util/url-multitaxonomy-pager-controller",
+    "description": "URL with Multitaxonomy: controllers for pager(fanta) models",
+    "keywords": ["URL", "multitaxonomy", "doctrine-dbal-util", "pager", "pagerfanta", "controller", "snowyowl"],
+    "homepage": "https://github.com/doctrine-dbal-util/url-multitaxonomy-pager-controller",
+    "license": "ISC",
+    "authors": [
+        {"name": "Jean-bernard Addor"},
+        {"name": "Community", "homepage": "https://github.com/doctrine-dbal-util/url-multitaxonomy-pager-controller"}
+    ],
+    "require": {
+        "php": "^5.0",
+        "dbal-util/connection-pagerfanta": "^0.1",
+        "symfony/form": "^2.7 || ^3.0 || ^4.0",
+        "symfony/http-foundation": "^2.7 || ^3.0 || ^4.0",
+        "symfony/options-resolver": "^2.7 || ^3.0 || ^4.0",
+        "symfony/routing": "^2.7 || ^3.0 || ^4.0",
+        "symfony/security": "^2.7 || ^3.0 || ^4.0",
+        "symfony/templating": "^2.7 || ^3.0 || ^4.0"
+    },
+    "require-dev": {
+        "escapestudios/symfony2-coding-standard": "^2.11"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": { "DoctrineDbalUtil\\UrlMultiTaxonomy\\PagerController\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
+

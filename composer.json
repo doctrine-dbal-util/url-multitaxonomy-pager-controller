@@ -22,6 +22,7 @@
         "escapestudios/symfony2-coding-standard": "^2.11"
     },
     "suggest": {
+            "doctrine-dbal-util/url-multitaxonomy-pagerfanta-twig": "Compatible templates"
     },
     "autoload": {
         "psr-4": { "DoctrineDbalUtil\\UrlMultiTaxonomy\\PagerController\\": "" }

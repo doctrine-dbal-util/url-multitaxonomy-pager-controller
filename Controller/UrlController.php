@@ -32,7 +32,7 @@ use Twig_SimpleFunction;
  *
  * @Route("url")
  */
-class UrlController // extends Controller
+class UrlController
 {
     /**
      * Lists all uRL entities.

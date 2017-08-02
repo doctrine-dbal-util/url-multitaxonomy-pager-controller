@@ -2,7 +2,7 @@
 
 namespace DoctrineDbalUtil\UrlMultiTaxonomy\PagerController\Controller;
 
-// use AppBundle\Form\URLForm;
+use DoctrineDbalUtil\UrlMultiTaxonomy\PagerController\UrlForm;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -76,7 +76,7 @@ class UrlController
         EngineInterface $templating
     )
     {
-        $form = $formFactory->create(URLForm::class);
+        $form = $formFactory->create(UrlForm::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -128,7 +128,7 @@ class UrlController
         // $uRL = ['url' => $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url']];
 
         $deleteForm = self::createDeleteForm($uRL, $urlGenerator, $formFactory);
-        $editForm = $formFactory->create(URLForm::class, ['url' => $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url']]);
+        $editForm = $formFactory->create(UrlForm::class, ['url' => $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url']]);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class URLForm extends AbstractType
+class UrlForm extends AbstractType
 {
     /**
      * {@inheritdoc}

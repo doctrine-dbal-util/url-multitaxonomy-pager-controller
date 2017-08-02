@@ -47,7 +47,7 @@ class UrlController
         EngineInterface $templating
     )
     {
-        return new Response($templating->render('AppBundle:url:index.html.twig', [
+        return new Response($templating->render('@UrlMultiTaxonomyPagerfanta/index.html.twig', [
             'uRLs' => $model
                 ->getUrlIndexPager('url', 'uuid', 'url_uuid',
                     'owned_url', 'uuid', 'owned_url_uuid',
@@ -94,7 +94,7 @@ class UrlController
             return new RedirectResponse($urlGenerator->generate('url_show', ['uuid' => $owned_url_uuid]));
         }
 
-        return new Response($templating->render('AppBundle:url:new.html.twig', [
+        return new Response($templating->render('@UrlMultiTaxonomyPagerfanta/new.html.twig', [
             'form' => $form->createView(),
         ]));
     }
@@ -146,7 +146,7 @@ class UrlController
             // TODO: be sure to use updated version of UUID?!
         }
 
-        return new Response($templating->render('AppBundle:url:edit.html.twig', array(
+        return new Response($templating->render('@UrlMultiTaxonomyPagerfanta/edit.html.twig', array(
             'uRL' => $uRL,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -183,7 +183,7 @@ class UrlController
         $taxonomyForm = self::createAddTaxonomyTermForm($uRL, $urlGenerator, $formFactory);
         // $emptyTaxonomyForm = $this->createAddGivenTaxonomyTermEmptyForm($uRL); // tmp todelete
 
-        return new Response($templating->render('AppBundle:url:show.html.twig', [
+        return new Response($templating->render('@UrlMultiTaxonomyPagerfanta/show.html.twig', [
             'uRL' => $uRL,
             'delete_form' => $deleteForm->createView(),
             'taxonomy_form' => $taxonomyForm->createView(),
@@ -274,7 +274,7 @@ class UrlController
         // }
 
         return $this->redirectToRoute('url_show', ['uuid' => $owned_url_uuid]);
-        //return $this->render('AppBundle:url:taxonomy.html.twig', [
+        //return $this->render('@UrlMultiTaxonomyPagerfanta/taxonomy.html.twig', [
             //'uRL' => $uRL,
             //// 'delete_form' => $deleteForm->createView(),
             //'taxonomy_form' => $taxonomyForm->createView(),
@@ -315,7 +315,7 @@ class UrlController
         // }
 
         return $this->redirectToRoute('url_show', ['uuid' => $url_uuid]);
-        //return $this->render('AppBundle:url:taxonomy.html.twig', [
+        //return $this->render('@UrlMultiTaxonomyPagerfanta/taxonomy.html.twig', [
             //'uRL' => $uRL,
             //// 'delete_form' => $deleteForm->createView(),
             //'taxonomy_form' => $taxonomyForm->createView(),
@@ -355,7 +355,7 @@ class UrlController
             // endif;
         }
 
-        return $this->render('AppBundle:url:taxonomy.html.twig', [
+        return $this->render('@UrlMultiTaxonomyPagerfanta/taxonomy.html.twig', [
             'uRL' => $uRL,
             // 'delete_form' => $deleteForm->createView(),
             'taxonomy_form' => $taxonomyForm->createView(),

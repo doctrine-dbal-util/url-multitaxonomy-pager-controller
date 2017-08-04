@@ -250,9 +250,16 @@ class UrlController
      * @Route("/taxo/{owned_url_uuid}/{taxo_uuid}", name="url_attach_taxonomy_term_leaf")
      * @Method({"POST"})
      */
-    public function attachTaxonomyTermLeafAction__unused(Request $request, UserInterface $user, $owned_url_uuid, $taxo_uuid)
+    public function attachTaxonomyTermLeafAction(
+        $owned_url_uuid,
+        $taxo_uuid,
+        UrlGeneratorInterface $urlGenerator,
+        \RaphiaDBAL $model
+        // Request $request,
+        // UserInterface $user,
+    )
     {
-        $model = $this->container->get('raphia_model');
+        // $model = $this->container->get('raphia_model');
         // $uRL = $model->getByUnique('owned_url', ['uuid' => $url_uuid]);
         // $uRL['url'] = $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url'];
 
@@ -272,7 +279,8 @@ class UrlController
             // endif;
         // }
 
-        return $this->redirectToRoute('url_show', ['uuid' => $owned_url_uuid]);
+        // return $this->redirectToRoute('url_show', ['uuid' => $owned_url_uuid]);
+        return new RedirectResponse($urlGenerator->generate('url_show', ['uuid' => $owned_url_uuid]));
         //return $this->render('@UrlMultiTaxonomyPagerfanta/taxonomy.html.twig', [
             //'uRL' => $uRL,
             //// 'delete_form' => $deleteForm->createView(),

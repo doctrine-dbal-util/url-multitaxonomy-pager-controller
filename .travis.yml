@@ -19,7 +19,7 @@ before_install:
   # - composer
   - which composer
   # - php -d memory_limit=-1 /home/travis/.phpenv/shims/composer
-  - composer -d memory_limit=-1
+  # - composer -d memory_limit=-1
 
 install:
   - composer install

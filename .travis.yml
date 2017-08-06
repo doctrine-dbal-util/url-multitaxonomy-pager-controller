@@ -18,7 +18,8 @@ before_install:
   # - composer self-update not needed
   # - composer
   - which composer
-  - php -d memory_limit=-1 /home/travis/.phpenv/shims/composer
+  # - php -d memory_limit=-1 /home/travis/.phpenv/shims/composer
+  - composer -d memory_limit=-1
 
 install:
   - composer install
@@ -26,7 +27,9 @@ install:
 script:
   # - ./vendor/bin/simple-phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
-  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -v -- .:Controler
+  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv --stop-on-violation
+  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- .
+  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- Controller
   # this checks that the YAML config files contain no syntax errors
   # - ./bin/console lint:yaml config
   # - ./bin/console lint:yaml @CodeExplorerBundle

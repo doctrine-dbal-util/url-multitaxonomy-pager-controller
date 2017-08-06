@@ -8,30 +8,32 @@ cache:
 matrix:
   fast_finish: true
   include:
-    - php: 5.5
+    # - php: 5.5
     - php: 5.6
-    - php: 7.0
-    - php: 7.1
+    # - php: 7.0
+    # - php: 7.1
 
 before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
+  - composer
+  - which composer
 
 install:
   - composer install
 
 script:
-  - ./vendor/bin/simple-phpunit
+  # - ./vendor/bin/simple-phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
   - ./vendor/bin/php-cs-fixer fix --diff --dry-run -v
   # this checks that the YAML config files contain no syntax errors
-  - ./bin/console lint:yaml config
-  - ./bin/console lint:yaml @CodeExplorerBundle
+  # - ./bin/console lint:yaml config
+  # - ./bin/console lint:yaml @CodeExplorerBundle
   # this checks that the Twig template files contain no syntax errors
-  - ./bin/console lint:twig templates @CodeExplorerBundle
+  # - ./bin/console lint:twig templates @CodeExplorerBundle
   # this checks that the XLIFF translations contain no syntax errors
-  - ./bin/console lint:xliff templates
+  # - ./bin/console lint:xliff templates
   # this checks that the application doesn't use dependencies with known security vulnerabilities
-  - ./bin/console security:check --end-point=http://security.sensiolabs.org/check_lock
+  # - ./bin/console security:check --end-point=http://security.sensiolabs.org/check_lock
 
 # inspirated from symfony/symfony-demo

@@ -8,6 +8,8 @@
         {"name": "Jean-bernard Addor"},
         {"name": "Community", "homepage": "https://github.com/doctrine-dbal-util/url-multitaxonomy-pager-controller"}
     ],
+    "prefer-stable": true,
+    "minimum-stability": "dev",
     "require": {
         "php": "^5.0",
         "dbal-util/connection-pagerfanta": "^0.1@dev",

@@ -15,9 +15,9 @@ matrix:
 
 before_install:
   - phpenv config-rm xdebug.ini
-  - composer self-update
-  - composer
-  - which composer
+  # - composer self-update not needed
+  # - composer
+  - php -d memory_limit=-1 `which composer`
 
 install:
   - composer install

@@ -26,7 +26,7 @@ install:
 script:
   # - ./vendor/bin/simple-phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
-  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -v
+  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -v -- .:Controler
   # this checks that the YAML config files contain no syntax errors
   # - ./bin/console lint:yaml config
   # - ./bin/console lint:yaml @CodeExplorerBundle

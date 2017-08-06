@@ -18,6 +18,8 @@ before_install:
   # - composer self-update not needed
   # - composer
   - which composer
+  - file `which composer`
+  - cat `which composer`
   # - php -d memory_limit=-1 /home/travis/.phpenv/shims/composer
   # - composer -d memory_limit=-1
 

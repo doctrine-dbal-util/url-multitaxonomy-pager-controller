@@ -29,9 +29,10 @@ install:
 script:
   # - ./vendor/bin/simple-phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
-  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv --stop-on-violation
-  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- .
-  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- Controller
+  # - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv --stop-on-violation
+  # - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- .
+  # - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- Controller
+  - ./vendor/bin/php-cs-fixer fix --stop-on-violation --diff --dry-run -vvv --using-cache=no
   # this checks that the YAML config files contain no syntax errors
   # - ./bin/console lint:yaml config
   # - ./bin/console lint:yaml @CodeExplorerBundle

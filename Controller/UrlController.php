@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Doctrine DBAL Util package.
+ *
+ * (c) Jean-Bernard Addor
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DoctrineDbalUtil\UrlMultiTaxonomy\PagerController\Controller;
 
 use DoctrineDbalUtil\UrlMultiTaxonomy\PagerController\UrlForm;
@@ -12,13 +21,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-# use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-# use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+// use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+// use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 // New in version 3.2: The functionality to get the user via the method signature was introduced in Symfony 3.2. You can still retrieve it by calling $this->getUser() if you extend the Controller class.
 // http://symfony.com/doc/current/security.html#retrieving-the-user-object
 use Symfony\Component\Templating\EngineInterface;
-// TODO: Remove Twig in filename
 
 /**
  * Url controller.
@@ -72,7 +80,7 @@ class UrlController
         if ($form->isSubmitted() && $form->isValid()) {
             // TODO: rewrite with new postgres in Debian 9 using "ON CONFLICT"
             $url_uuid = $model->getByUnique('url', $form->getData())['uuid'];
-            if (null == $url_uuid):
+            if (null === $url_uuid):
                 $url_uuid = $model->insert_url_returning_uuid('url', $form->getData())['uuid']; // TODO: verify if already exists
             endif;
             $owned_url_uuid = $model->insert_returning_uuid('owned_url', ['url_uuid' => $url_uuid])['uuid'];
@@ -93,7 +101,7 @@ class UrlController
     //     WHEN true  THEN (SELECT uuid FROM url WHERE url = 'http://php.net/')
     //     ELSE (INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/') RETURNING uuid)
     // END;
-    
+
     // INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/')
     //     ON CONFLICT (uuid) DO NOTHING RETURNING uuid;
 
@@ -126,7 +134,7 @@ class UrlController
             // url garbage collection
             // TODO: rewrite with new postres in Debian 9 using "ON CONFLICT"
             $url_uuid = $model->getByUnique('url', $form_url)['uuid'];
-            if (null == $url_uuid):
+            if (null === $url_uuid):
                 $url_uuid = $model->insert_url_returning_uuid('url', $form_url)['uuid']; // TODO: verify if already exists
             endif;
             $model->updateByUnique('owned_url', $uuida, ['url_uuid' => $url_uuid]);
@@ -141,6 +149,7 @@ class UrlController
             'delete_form' => $deleteForm->createView(),
         ]));
     }
+
     // if ($uRL['url_uuid'] <> $url_uuid):
     // SELECT CASE EXISTS (SELECT * FROM owned_url WHERE url_uuid = $uRL['url_uuid'])
     //     WHEN false THEN (DELETE url WHERE uuid = $uRL['url_uuid'])
@@ -153,7 +162,7 @@ class UrlController
      * @Route("/{uuid}", name="url_show")
      * @Method("GET")
      */
-    public function showAction( // static //////////////////////////////
+    public function showAction(// static //////////////////////////////
         $uuid,
         UserInterface $user,
         Request $request,
@@ -182,12 +191,12 @@ class UrlController
                     'user_uuid', 'uuid', 'http_user',
                     ['uuid' => $user->getId()], 'base.term')
                 ->setMaxPerPage(2) // 100
-                ->setCurrentPage($request->query->getInt('term_page', 1))
-                , // TODO use dependency injection Container to search db only when needed!
+                ->setCurrentPage($request->query->getInt('term_page', 1)), 
+            // TODO use dependency injection Container to search db only when needed!
             // 'taxonomy_form_generator' => new Twig_SimpleFunction('taxonomy_form_object', function ($uuids) {return $this->createAddGivenTaxonomyTermEmptyForm($uuids)->createView();}),
             'taxonomy_form_object' => new FormGenerator($formFactory->createBuilder(), $urlGenerator),
             'controller' => $this, /////////////////////////////////////!
-            'f' => function (array $uuids) {return $this->createAddGivenTaxonomyTermEmptyFormView($uuids);},
+            'f' => function (array $uuids) {return $this->createAddGivenTaxonomyTermEmptyFormView($uuids); },
             // 'clo' => function () {return function (array $uuids) {return $this->createAddGivenTaxonomyTermEmptyFormView($uuids);};},
             'fb' => $formFactory->createBuilder(),
             'ff' => $formFactory,
@@ -210,7 +219,7 @@ class UrlController
         FormFactoryInterface $formFactory
     ) {
         // TODO: authorization
-        
+
         $uRL = $model->getByUnique('owned_url', ['uuid' => $uuid]);
 
         $form = self::createDeleteForm($uRL, $urlGenerator, $formFactory);
@@ -251,19 +260,19 @@ class UrlController
         // $uRL['url'] = $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url'];
 
         // TODO: authorization
-        
+
         // $taxonomyForm = $this->createAddTaxonomyTermForm($uRL);
         // $taxonomyForm->handleRequest($request);
 
         // if ($taxonomyForm->isSubmitted() && $taxonomyForm->isValid()) {
-            // if ($taxonomyForm->get('attachTerm')->isClicked()):
-                $term = $model->getByUnique('taxonomy_tree', ['uuid' => $taxo_uuid]);
-                // if (null != $term):
-                    $model->insert_uuid4('link_owned_url_taxonomy', ['owned_url_uuid' => $owned_url_uuid, 'taxonomy_uuid' => $term['synonym_uuid']]);
-                // endif;
-            // elseif ($taxonomyForm->get('redirectToShow')->isClicked()):
-                // return $this->redirectToRoute('url_show', ['uuid' => $uuid]);
-            // endif;
+        //     if ($taxonomyForm->get('attachTerm')->isClicked()):
+        $term = $model->getByUnique('taxonomy_tree', ['uuid' => $taxo_uuid]);
+        //         if (null != $term):
+        $model->insert_uuid4('link_owned_url_taxonomy', ['owned_url_uuid' => $owned_url_uuid, 'taxonomy_uuid' => $term['synonym_uuid']]);
+        //         endif;
+        //     elseif ($taxonomyForm->get('redirectToShow')->isClicked()):
+        //         return $this->redirectToRoute('url_show', ['uuid' => $uuid]);
+        //     endif;
         // }
 
         // return $this->redirectToRoute('url_show', ['uuid' => $owned_url_uuid]);
@@ -299,19 +308,19 @@ class UrlController
         // $uRL['url'] = $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url'];
 
         // TODO: authorization
-        
+
         // $taxonomyForm = $this->createAddTaxonomyTermForm($uRL);
         // $taxonomyForm->handleRequest($request);
 
         // if ($taxonomyForm->isSubmitted() && $taxonomyForm->isValid()) {
-            // if ($taxonomyForm->get('attachTerm')->isClicked()):
-                $term = $model->getByUnique('taxonomy_tree', ['uuid' => $taxo_uuid]);
-                // if (null != $term):
-                    $model->deleteByUnique('link_owned_url_taxonomy', ['owned_url_uuid' => $url_uuid, 'taxonomy_uuid' => $term['synonym_uuid']]);
-                // endif;
-            // elseif ($taxonomyForm->get('redirectToShow')->isClicked()):
-                // return $this->redirectToRoute('url_show', ['uuid' => $uuid]);
-            // endif;
+        //     if ($taxonomyForm->get('attachTerm')->isClicked()):
+        $term = $model->getByUnique('taxonomy_tree', ['uuid' => $taxo_uuid]);
+        //         if (null !== $term):
+        $model->deleteByUnique('link_owned_url_taxonomy', ['owned_url_uuid' => $url_uuid, 'taxonomy_uuid' => $term['synonym_uuid']]);
+        //         endif;
+        //     elseif ($taxonomyForm->get('redirectToShow')->isClicked()):
+        //         return $this->redirectToRoute('url_show', ['uuid' => $uuid]);
+        //     endif;
         // }
 
         return new RedirectResponse($urlGenerator->generate('url_show', ['uuid' => $url_uuid]));
@@ -340,7 +349,7 @@ class UrlController
         $uRL['url'] = $model->getByUnique('url', ['uuid' => $uRL['url_uuid']])['url'];
 
         // TODO: authorization
-        
+
         $taxonomyForm = $this->createAddTaxonomyTermForm($uRL);
         $taxonomyForm->handleRequest($request);
 
@@ -425,12 +434,12 @@ class UrlController
             ->getForm()->createView()
         ;
     }
-// <form action={{ path('url_attach_taxonomy_term_leaf', { 'url_uuid': uRL.uuid, 'taxo_uuid': term.uuid}) }}  method="post"><input type="submit" value={{ term.term }}></form>
+    // <form action={{ path('url_attach_taxonomy_term_leaf', { 'url_uuid': uRL.uuid, 'taxo_uuid': term.uuid}) }}  method="post"><input type="submit" value={{ term.term }}></form>
 }
 
 class FormGenerator
 {
-    function __construct($formBuilder, $router)
+    public function __construct($formBuilder, $router)
     {
         $this->formBuilder = $formBuilder;
         $this->router = $router;
@@ -444,16 +453,15 @@ class FormGenerator
             ->getForm()
             ->createView()
         ;
-    }   
+    }
 }
 
 class CallableObject__unused // To call a function from Twig?
 {
-    function __construct(callable $c)
+    public function __construct(callable $c)
     {
         $this->callableObject = $c;
     }
-
 
     public function __invoke(...$params)
     {

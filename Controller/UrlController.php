@@ -59,7 +59,6 @@ class UrlController
         ]));
     }
 
-
     /**
      * Creates a new uRL entity.
      *
@@ -96,6 +95,7 @@ class UrlController
             'form' => $form->createView(),
         ]));
     }
+
     // SELECT CASE EXISTS (SELECT uuid FROM url WHERE url = 'http://php.net/')
     //     WHEN false THEN (INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/') RETURNING uuid)
     //     WHEN true  THEN (SELECT uuid FROM url WHERE url = 'http://php.net/')
@@ -104,7 +104,6 @@ class UrlController
 
     // INSERT INTO url (uuid, url) VALUES (uuid_generate_v5(uuid_ns_url(), 'http://php.net/'), 'http://php.net/')
     //     ON CONFLICT (uuid) DO NOTHING RETURNING uuid;
-
 
     /**
      * Displays a form to edit an existing uRL entity.
@@ -191,7 +190,7 @@ class UrlController
                     'user_uuid', 'uuid', 'http_user',
                     ['uuid' => $user->getId()], 'base.term')
                 ->setMaxPerPage(2) // 100
-                ->setCurrentPage($request->query->getInt('term_page', 1)), 
+                ->setCurrentPage($request->query->getInt('term_page', 1)),
             // TODO use dependency injection Container to search db only when needed!
             // 'taxonomy_form_generator' => new Twig_SimpleFunction('taxonomy_form_object', function ($uuids) {return $this->createAddGivenTaxonomyTermEmptyForm($uuids)->createView();}),
             'taxonomy_form_object' => new FormGenerator($formFactory->createBuilder(), $urlGenerator),
@@ -203,7 +202,6 @@ class UrlController
             'model' => $model,
         ]));
     }
-
 
     /**
      * Deletes a uRL entity.
@@ -231,6 +229,7 @@ class UrlController
 
         return new RedirectResponse($urlGenerator->generate('url_index'));
     }
+
     // SELECT CASE EXISTS (SELECT * FROM owned_url WHERE url_uuid = $uRL['url_uuid'])
     //     WHEN false THEN (DELETE url WHERE uuid = $uRL['url_uuid'])
     // END;
@@ -239,7 +238,6 @@ class UrlController
     //         WHEN false THEN (DELETE FROM url WHERE uuid = $1) -- syntax error near from
     //     END;
     // Anyways one should implement deletion date field before really deleting...
-
 
     /**
      * Attach a taxonomy term to a uRL entity (leafs part).
@@ -288,7 +286,6 @@ class UrlController
         //]);
     }
 
-
     /**
      * Detach a taxonomy term to a uRL entity (leafs part).
      *
@@ -296,9 +293,9 @@ class UrlController
      * @Method({"DELETE"})
      */
     public static function detachTaxonomyTermAction(
-        // Request $request, 
-        // UserInterface $user, 
-        $url_uuid, 
+        // Request $request,
+        // UserInterface $user,
+        $url_uuid,
         $taxo_uuid,
         UrlGeneratorInterface $urlGenerator,
         \RaphiaDBAL $model
@@ -335,7 +332,6 @@ class UrlController
         //]);
     }
 
-
     /**
      * Attach a taxonomy term to a uRL entity (index part).
      *
@@ -355,10 +351,10 @@ class UrlController
 
         if ($taxonomyForm->isSubmitted() && $taxonomyForm->isValid()) {
             // if ($taxonomyForm->get('attachTerm')->isClicked()):
-                $term = $model->getByUnique('taxonomy_tree', $taxonomyForm->getData());
-                if (null != $term):
-                    $model->insert('link_owned_url_taxonomy', ['url_uuid' => $uuid, 'taxonomy_uuid' => $term['synonym_uuid']]);
-                endif;
+            $term = $model->getByUnique('taxonomy_tree', $taxonomyForm->getData());
+            if (null !== $term):
+                $model->insert('link_owned_url_taxonomy', ['url_uuid' => $uuid, 'taxonomy_uuid' => $term['synonym_uuid']]);
+            endif;
             // elseif ($taxonomyForm->get('redirectToShow')->isClicked()):
                 // return $this->redirectToRoute('url_show', ['uuid' => $uuid]);
             // endif;
@@ -371,7 +367,6 @@ class UrlController
             'model' => $model,
         ]);
     }
-
 
     /**
      * Creates a form to delete a uRL entity.
@@ -391,7 +386,6 @@ class UrlController
             ->getForm()
         ;
     }
-
 
     /**
      * Creates a form to collect and add a taxonomy term to a uRL entity.
@@ -418,7 +412,6 @@ class UrlController
         ;
     }
 
-
     /**
      * Creates a form to add a taxonomy term given in API argument to a uRL entity.
      *
@@ -434,6 +427,7 @@ class UrlController
             ->getForm()->createView()
         ;
     }
+
     // <form action={{ path('url_attach_taxonomy_term_leaf', { 'url_uuid': uRL.uuid, 'taxo_uuid': term.uuid}) }}  method="post"><input type="submit" value={{ term.term }}></form>
 }
 
@@ -444,7 +438,6 @@ class FormGenerator
         $this->formBuilder = $formBuilder;
         $this->router = $router;
     }
-
 
     public function create(array $uuids)
     {

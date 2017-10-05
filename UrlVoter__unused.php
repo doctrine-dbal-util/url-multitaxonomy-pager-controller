@@ -26,9 +26,9 @@ class UrlVoter__unused extends Voter
     {
         // if the attribute isn't one we support, return false
         if (!in_array($attribute, [
-                self::VIEW, 
+                self::VIEW,
                 // self::EDIT,
-            ])) {
+            ], true)) {
             return false;
         }
 
@@ -75,12 +75,12 @@ class UrlVoter__unused extends Voter
         return $url->getUsers()->contains($user);
     }
 
-/*
-    private function canEdit(Post $post, User $user)
-    {
-        // this assumes that the data object has a getOwner() method
-        // to get the entity of the user who owns this data object
-        return $user === $post->getOwner();
-    }
-*/
+    /*
+        private function canEdit(Post $post, User $user)
+        {
+            // this assumes that the data object has a getOwner() method
+            // to get the entity of the user who owns this data object
+            return $user === $post->getOwner();
+        }
+    */
 }

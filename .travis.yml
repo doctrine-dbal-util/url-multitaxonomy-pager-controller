@@ -8,31 +8,124 @@ cache:
 matrix:
   fast_finish: true
   include:
-    # - php: 5.5
-    - php: 5.6
-    # - php: 7.0
-    # - php: 7.1
+  - php: 5.4
+    env:
+    - SYMFONY_VERSION="2.3.*"
+    - PHPUNIT=phpunit-4.8
+    - TEST_LINT=`true`
+  - php: 5.5
+    env:
+    - SYMFONY_VERSION="2.7.*"
+    - PHPUNIT=phpunit-4.8
+    - TEST_LINT=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 5.5
+    env:
+    - SYMFONY_LTS="2"
+    - PHPUNIT=phpunit-4.8
+    - TEST_LINT=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 5.6
+    env:
+    # - SYMFONY="3"
+    - PHPUNIT=phpunit-5.7
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 7.0
+    env:
+    # - SYMFONY="3"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 7.1
+    env:
+    - SYMFONY_LTS="3"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 7.1
+    env:
+    # - SYMFONY="4"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 7.2
+    env:
+    - SYMFONY_LTS="3"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 7.2
+    env:
+    # - SYMFONY="4"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
+  - php: nightly
+    env:
+    - SYMFONY_LTS="3"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - SENSIO_SECURITY=`true`
+  - php: nightly
+    env:
+    # - SYMFONY="4"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - SENSIO_SECURITY=`true`
+  allow_failures:
+  - php: 5.4
+  - php: 5.5 # needs older phpunit
+  - php: nightly
 
 before_install:
-  - phpenv config-rm xdebug.ini
-  # - composer self-update not needed
-  # - composer
+  - echo $PHPUNIT
+  - pwd
+  - echo $HOME
+  - echo $TRAVIS_PHP_VERSION
   - which composer
-  - file `which composer`
-  - cat `which composer`
-  # - php -d memory_limit=-1 /home/travis/.phpenv/shims/composer
-  # - composer -d memory_limit=-1
+  - ls /tmp
+  - php --ini
+  - xdebug=/home/travis/.phpenv/versions/$TRAVIS_PHP_VERSION/etc/conf.d/xdebug.ini
+  - if [[ -f $xdebug ]]; then cat $xdebug; cp $xdebug /tmp; phpenv config-rm xdebug.ini; fi
+  - xdebug_php=
+  - if [[ -f /tmp/xdebug.ini ]]; then xdebug_php='-c /tmp/xdebug.ini'; fi
+  - install --directory .travis/bin
+  - if [[ -v PHP_CS_FIXER ]]; then wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar --output-document=.travis/bin/php-cs-fixer; fi
+  - if [[ -v PHPUNIT ]]; then wget https://phar.phpunit.de/${PHPUNIT}.phar --output-document=.travis/bin/$PHPUNIT; fi
+  - if [[ -v SENSIO_SECURITY ]]; then wget http://get.sensiolabs.org/security-checker.phar --output-document=.travis/bin/security-checker; fi
 
 install:
-  - composer install
+  - composer validate
+  - if [[ -v SYMFONY_VERSION ]]; then composer require symfony/symfony:${SYMFONY_VERSION} --no-scripts --no-progress --no-suggest; fi
+  - if [[ -v SYMFONY_LTS ]]; then composer require symfony/lts:${SYMFONY_LTS} --no-scripts --no-progress --no-suggest; fi
+  - if [[ -f config/parameters.yml.travis ]]; then cp config/parameters.yml.travis config/parameters.yml; fi
+  - composer install --no-progress --no-suggest --optimize-autoloader --apcu-autoloader
+  - composer show
+
+before_script:
 
 script:
+  - for f in $(find . -path './vendor' -prune -o -path './tests' -prune -o -name \*.php -print) ; do php -l $f ; done # Do this first!
+  - if [[ -v TEST_LINT ]]; then for f in $(find ./tests -name \*.php -print); do php -l $f; done; fi
+  - if [[ -v PHP_CS_FIXER ]]; then php .travis/bin/php-cs-fixer --version; fi
+  - if [[ -v PHP_CS_FIXER ]]; then php .travis/bin/php-cs-fixer fix --diff --dry-run -vvv --using-cache=no; fi #  --stop-on-violation
+
+  #  - if [[ -v PHPUNIT ]]; then php --ini -c /tmp/xdebug.ini; php $xdebug_php .travis/bin/$PHPUNIT --colors=always; fi
+
+  - if [[ -v SENSIO_SECURITY ]]; then php .travis/bin/security-checker security:check --end-point=http://security.sensiolabs.org/check_lock; fi
+    #^ This checks that the application doesn't use dependencies with known security vulnerabilities
+  - if [[ -v VENDOR_LINT ]]; then for f in $(find ./vendor -name \*.php); do php -l $f > /dev/null; done; fi
+    #^ Should be the last line of install but sometimes long to execute and little can be done for errors found.
+
   # - ./vendor/bin/simple-phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
-  # - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv --stop-on-violation
-  # - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- .
-  # - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv -- Controller
-  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -vvv --using-cache=no
   # this checks that the YAML config files contain no syntax errors
   # - ./bin/console lint:yaml config
   # - ./bin/console lint:yaml @CodeExplorerBundle
@@ -43,4 +136,9 @@ script:
   # this checks that the application doesn't use dependencies with known security vulnerabilities
   # - ./bin/console security:check --end-point=http://security.sensiolabs.org/check_lock
 
-# inspirated from symfony/symfony-demo
+after_success:
+    - bash <(curl -s https://codecov.io/bash) -s /tmp
+
+# inspirated from:
+  # symfony/symfony-demo
+  # https://github.com/doctrine/dbal/blob/v2.5.13/.travis.yml

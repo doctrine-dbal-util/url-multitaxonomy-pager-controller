@@ -83,7 +83,7 @@ matrix:
   - php: 5.4
   - php: 5.5 # needs older phpunit
   - php: 5.6 # Sensio security
-  - php: 5.7 # Sensio security
+  - php: 7.0 # Sensio security
   - php: nightly
 
 before_install:

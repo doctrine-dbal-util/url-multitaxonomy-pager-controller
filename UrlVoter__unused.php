@@ -25,7 +25,7 @@ class UrlVoter__unused extends Voter
     protected function supports($attribute, $subject)
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [
+        if (!\in_array($attribute, [
                 self::VIEW,
                 // self::EDIT,
             ], true)) {

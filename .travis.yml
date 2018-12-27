@@ -67,6 +67,20 @@ matrix:
     - TEST_LINT=`true`
     - PHP_CS_FIXER=`true`
     - SENSIO_SECURITY=`true`
+  - php: 7.3
+    env:
+    - SYMFONY_LTS="3"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
+  - php: 7.3
+    env:
+    # - SYMFONY="4"
+    - PHPUNIT=phpunit
+    - TEST_LINT=`true`
+    - PHP_CS_FIXER=`true`
+    - SENSIO_SECURITY=`true`
   - php: nightly
     env:
     - SYMFONY_LTS="3"
@@ -84,6 +98,7 @@ matrix:
   - php: 5.5 # needs older phpunit
   - php: 5.6 # Sensio security
   - php: 7.0 # Sensio security
+  - php: 7.3
   - php: nightly
 
 before_install:
